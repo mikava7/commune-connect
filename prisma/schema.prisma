@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model Neighborhood {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  location String
+  image String
+  members String
+ 
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+}
+
+model Member {
+  id Int @id @default(autoincrement())
+  name String
+  email String
+  roles Role[]   
+  councils Council[]
+
+}
+model Role {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  members Member[]  
+}
+
+model Council {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  members Member[]   
+}
+
+
+model Product {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  price Decimal
+  availability Boolean
+}
+
+model Book {
+  id Int @id @default(autoincrement())
+  author String
+  country String
+  link String
+  title String
+  imageLink String
+  language String
+  pages Int
+  year Int
+  }
