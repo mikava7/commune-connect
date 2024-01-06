@@ -27,28 +27,48 @@ model Category {
   id Int @id @default(autoincrement())
   name String
   description String
+  post Post[]
 }
 
 model Member {
   id Int @id @default(autoincrement())
   name String
-  email String
-  roles Role[]   
-  councils Council[]
-
-}
-model Role {
-  id Int @id @default(autoincrement())
-  name String
-  description String
-  members Member[]  
+  role     Role     @default(MEMBER)
+  email String @unique
+  posts   Post[]
+  profile Profile?
+  address String
+  imageLink String
 }
 
+model Profile {
+  id     Int    @id @default(autoincrement())
+  bio    String
+  member   Member   @relation(fields: [memberId], references: [id])
+  memberId Int    @unique
+    @@index([memberId], name: "idx_memberId") // Add an index for better performance
+
+}
+enum Role {
+  MEMBER
+  ADMIN
+}
+model Post {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  title      String
+  published  Boolean    @default(false)
+  author     Member       @relation(fields: [authorId], references: [id])
+  authorId   Int
+  @@index([authorId], name: "idx_authorId")
+  categories Category[]
+
+}
 model Council {
   id Int @id @default(autoincrement())
   name String
   description String
-  members Member[]   
 }
 
 
