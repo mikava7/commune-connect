@@ -1,7 +1,7 @@
 // fetchBooks.ts
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
-import prisma from "./prisma";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+// import prisma from "./prisma";
 import { Book, Member } from "./definitions";
 export async function fetchBooks(): Promise<Book[]> {
   try {
@@ -24,7 +24,7 @@ export async function fetchBooks(): Promise<Book[]> {
 
 export async function fetchMembers() {
   try {
-    const members = await prisma.member.findMany();
+    const members = await prisma.member.findMany({});
     return members;
   } catch (error: any) {
     // Handle errors by throwing an exception
@@ -41,6 +41,9 @@ export async function getUser(userId: string) {
       where: {
         id: parseInt(userId), // Assuming member IDs are integers
       },
+      include: {
+        posts: true,
+      },
     });
 
     return member;
@@ -52,3 +55,28 @@ export async function getUser(userId: string) {
     await prisma.$disconnect();
   }
 }
+
+export async function createPost() {
+  const userId = 41;
+  const postData = {
+    title: "first Your Post Title",
+    content:
+      "// or false based on your requirementsYour Post Title // or false based on your requirements",
+
+    published: true, // or false based on your requirements
+    authorId: userId, // Assign the ID of the user who creates the post
+    // Other fields based on your model
+  };
+
+  try {
+    const createdPost = await prisma.posts.create({
+      data: postData,
+    });
+    console.log("Created post:", createdPost);
+  } catch (error) {
+    console.error("Error creating post:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+createPost();

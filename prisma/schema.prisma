@@ -27,7 +27,7 @@ model Category {
   id Int @id @default(autoincrement())
   name String
   description String
-  post Post[]
+  posts Posts[]
 }
 
 model Member {
@@ -35,7 +35,7 @@ model Member {
   name String
   role     Role     @default(MEMBER)
   email String @unique
-  posts   Post[]
+  posts   Posts[]
   profile Profile?
   address String
   imageLink String
@@ -53,12 +53,14 @@ enum Role {
   MEMBER
   ADMIN
 }
-model Post {
+model Posts {
   id         Int        @id @default(autoincrement())
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   title      String
+  fileUrl    String @unique
   published  Boolean    @default(false)
+  content    String
   author     Member       @relation(fields: [authorId], references: [id])
   authorId   Int
   @@index([authorId], name: "idx_authorId")

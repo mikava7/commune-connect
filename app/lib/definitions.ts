@@ -24,10 +24,12 @@ export enum Role {
   ADMIN = "ADMIN",
 }
 export type Post = {
-  id?: number;
+  id: number;
   createdAt: Date;
   updatedAt: Date;
-  title?: string;
+  title: string;
+  content: string;
+  fileUrl: string;
   published: boolean;
   author: Member;
   authorId: number;
