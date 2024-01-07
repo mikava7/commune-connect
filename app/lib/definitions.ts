@@ -12,12 +12,10 @@ export type Book = {
 
 export type Member = {
   id: number;
+  address: string;
   name: string;
   role: Role;
   email: string;
-  posts: Post[];
-  profile: Profile;
-  address: string;
   imageLink: string;
 };
 

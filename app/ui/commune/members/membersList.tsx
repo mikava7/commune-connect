@@ -10,7 +10,7 @@ import {
   FlexContainer,
 } from "../../../../styles/styled-components";
 export default function MembersList({ members }: { members: Member[] }) {
-  console.log("MembersList in MembersList", members);
+  // console.log("MembersList in MembersList", members);
   return (
     <StyledContainer>
       <h1 className="mb-8 text-xl md:text-2xl">Members</h1>
@@ -91,7 +91,7 @@ export default function MembersList({ members }: { members: Member[] }) {
                   {member.address || "Unknown"}
                 </Address>
 
-                <StyledLink href="/view-details">
+                <StyledLink href={`/commune/members/${member.id}`}>
                   <StyledLinkContainer>
                     <EyeIcon
                       xmlns="http://www.w3.org/2000/svg"
@@ -124,6 +124,7 @@ export default function MembersList({ members }: { members: Member[] }) {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="black"
+                className="w-6 h-6"
               >
                 <path
                   strokeLinecap="round"
@@ -205,7 +206,6 @@ const Name = styled.p`
   font-weight: bold;
   color: black;
   margin-top: 1rem;
-  margin-left: -0.2rem;
   margin-bottom: 0.2rem;
 `;
 const NameIcon = styled.svg`
@@ -213,7 +213,7 @@ const NameIcon = styled.svg`
   height: 1rem;
   margin: auto;
   font-weight: bold;
-  margin-right: 0.1rem;
+  margin-right: 0.3rem;
 `;
 const Address = styled.span`
   display: flex;
@@ -228,6 +228,7 @@ const Address = styled.span`
 const AddressIcon = styled.svg`
   width: 1.1rem;
   height: 1.1rem;
+  margin-right: 0.2rem;
 `;
 
 const EmailContainer = styled.span`

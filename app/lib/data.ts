@@ -1,6 +1,7 @@
 // fetchBooks.ts
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+// import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient();
+import prisma from "./prisma";
 import { Book, Member } from "./definitions";
 export async function fetchBooks(): Promise<Book[]> {
   try {
@@ -28,6 +29,24 @@ export async function fetchMembers() {
   } catch (error: any) {
     // Handle errors by throwing an exception
     throw new Error("Failed to fetch members: " + error.message);
+  } finally {
+    // Disconnect the Prisma client to release the database connection
+    await prisma.$disconnect();
+  }
+}
+
+export async function getUser(userId: string) {
+  try {
+    const member = await prisma.member.findUnique({
+      where: {
+        id: parseInt(userId), // Assuming member IDs are integers
+      },
+    });
+
+    return member;
+  } catch (error: any) {
+    // Handle errors by throwing an exception
+    throw new Error("Failed to fetch user: " + error.message);
   } finally {
     // Disconnect the Prisma client to release the database connection
     await prisma.$disconnect();
