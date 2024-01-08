@@ -1,6 +1,6 @@
 "use client";
 import { Post } from "@/app/lib/definitions";
-import { DeletePost } from "./buttons";
+import { DeletePost, EditPost } from "./buttons";
 type Props = {};
 
 const PostContainer = ({ posts }: { posts: Post }) => {
@@ -11,7 +11,11 @@ const PostContainer = ({ posts }: { posts: Post }) => {
         <div className=" m-3 p-3" key={post.id}>
           <h1>{post.title}</h1>
           <p>{post.content}</p>
-          <DeletePost id={post.id} />
+          <div className="flex justify-center m-4 gap-3">
+            <DeletePost id={post.id} />
+            <EditPost id={post.id} />
+          </div>
+
           <br />
         </div>
       ))}

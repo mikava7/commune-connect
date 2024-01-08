@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 const prisma = new PrismaClient();
 const authorId = 41;
-const FormsSchema = z.object({
+const FormSchema = z.object({
   id: z.number(),
   authorId: z.number({ invalid_type_error: "Please sign in" }),
 
@@ -14,7 +14,8 @@ const FormsSchema = z.object({
   content: z.string(),
 });
 
-const CreatePost = FormsSchema.omit({ id: true, date: true });
+const CreatePost = FormSchema.omit({ id: true, date: true });
+const UpdatePost = FormSchema.omit({ date: true, id: true });
 
 export type State = {
   errors?: {
@@ -62,6 +63,51 @@ export async function createPost(prevState: State, formData: FormData) {
   } finally {
     await prisma.$disconnect();
     console.log("In finally block");
+    revalidatePath("/posts/");
+    redirect("/posts/");
+  }
+}
+
+export async function editPost(
+  id: string,
+  prevState: State,
+  formData: FormData
+) {
+  const validatedFields = UpdatePost.safeParse({
+    authorId: authorId,
+    title: formData.get("title"),
+    content: formData.get("content"),
+  });
+
+  // If form validation fails, return errors early. Otherwise, continue.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Create Invoice.",
+    };
+  }
+
+  const { title, content } = validatedFields.data;
+  try {
+    // Use Prisma to update the post with the specified ID
+    const updatedPost = await prisma.posts.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        title,
+        content,
+      },
+    });
+
+    // Handle success (e.g., return the updated post)
+    return { message: "Post edited successfully", post: updatedPost };
+  } catch (error) {
+    // Handle errors (e.g., return an error message)
+    return { errors: { message: "Failed to edit post." } };
+  } finally {
+    // Disconnect from Prisma and trigger revalidation and redirection
+    await prisma.$disconnect();
     revalidatePath("/posts/");
     redirect("/posts/");
   }

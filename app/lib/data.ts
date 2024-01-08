@@ -58,12 +58,41 @@ export async function getUser(userId: string) {
 
 export async function getPosts() {
   try {
-    const posts = await prisma.posts.findMany();
+    const posts = await prisma.posts.findMany({
+      orderBy: {
+        createdAt: "desc", // Sorting by the createdAt field in descending order
+      },
+    });
     return posts;
   } catch (error: any) {
     throw new Error("Failed to fetch posts: " + error.message);
   } finally {
     // Disconnect the Prisma client to release the database connection
+    await prisma.$disconnect();
+  }
+}
+
+export async function fetchPostById({ id }: { id: number }) {
+  try {
+    // Use Prisma to find a post with the specified ID
+    const post = await prisma.posts.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    // Check if the post exists
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    return post;
+  } catch (error: any) {
+    // Handle errors (e.g., log the error or return null)
+    console.error(`Error fetching post by ID: ${error.message}`);
+    return null;
+  } finally {
+    // Disconnect from Prisma
     await prisma.$disconnect();
   }
 }
