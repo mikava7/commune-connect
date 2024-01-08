@@ -1,5 +1,6 @@
 "use server";
-
+import { signIn } from "../utils/auth";
+import { AuthError } from "next-auth";
 import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -19,7 +20,7 @@ const UpdatePost = FormSchema.omit({ date: true, id: true });
 
 export type State = {
   errors?: {
-    authorId?: string[] | undefined;
+    authorId?: number[] | undefined;
     title?: string[] | undefined;
     content?: string[] | undefined;
   };
@@ -69,7 +70,7 @@ export async function createPost(prevState: State, formData: FormData) {
 }
 
 export async function editPost(
-  id: string,
+  id: number,
   prevState: State,
   formData: FormData
 ) {
@@ -92,7 +93,7 @@ export async function editPost(
     // Use Prisma to update the post with the specified ID
     const updatedPost = await prisma.posts.update({
       where: {
-        id: parseInt(id),
+        id,
       },
       data: {
         title,
@@ -113,11 +114,11 @@ export async function editPost(
   }
 }
 
-export async function deletePost(id: string) {
+export async function deletePost(id: number) {
   try {
     await prisma.posts.delete({
       where: {
-        id: parseInt(id),
+        id,
       },
     });
     return { message: "Post deleted successfully" };
@@ -128,5 +129,24 @@ export async function deletePost(id: string) {
     await prisma.$disconnect();
     revalidatePath("/posts/");
     redirect("/posts/");
+  }
+}
+
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    await signIn("credentials", formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
   }
 }

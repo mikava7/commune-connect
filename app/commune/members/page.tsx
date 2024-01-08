@@ -9,6 +9,7 @@ type Props = {};
 export default async function page({}: Props) {
   // throw new Error("error");
   const members: Member[] = await fetchMembers();
+  console.log("member", members);
 
   return (
     <div>

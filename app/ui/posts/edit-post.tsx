@@ -4,7 +4,7 @@ import { useFormState } from "react-dom";
 import { editPost } from "@/app/lib/action";
 import { Post } from "@/app/lib/definitions";
 import { Button } from "../button";
-export default function EditForm({ post }: { post: Post }) {
+export default function EditForm({ post }: { post: any }) {
   const initialState = { message: null, errors: {} };
   const updatePostWithId = editPost.bind(null, post?.id);
 

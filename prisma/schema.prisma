@@ -10,6 +10,8 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/client"
+
 }
 
 
@@ -31,9 +33,10 @@ model Category {
 
 model Member {
   id Int @id @default(autoincrement())
-  name String
-  role     Role     @default(MEMBER)
   email String @unique
+  name String
+  password String
+  role     Role     @default(MEMBER)
   posts   Posts[]
   profile Profile?
   address String
@@ -58,8 +61,8 @@ model Posts {
   updatedAt  DateTime   @updatedAt
   title      String
   content    String
-  author     Member       @relation(fields: [authorId], references: [id])
-  authorId   Int
+  author     Member?       @relation(fields: [authorId], references: [id])
+  authorId   Int?
   @@index([authorId], name: "idx_authorId")
 
 }

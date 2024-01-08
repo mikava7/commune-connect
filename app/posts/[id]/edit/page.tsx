@@ -1,13 +1,28 @@
 import React from "react";
 import EditForm from "@/app/ui/posts/edit-post";
 import { fetchPostById } from "@/app/lib/data";
-import { Post } from "@/app/lib/definitions";
-export default async function Page() {
-  const id = 10;
-  const post: Post = await fetchPostById({ id });
+
+type Post = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  content: string;
+  authorId: number;
+};
+
+export default async function Page({ params }: { params: any }) {
+  const id = parseInt(params.id, 10);
+
+  const post: any = await fetchPostById({ id });
+
+  if (!post) {
+    // Handle the case where post is null (optional)
+    return <div>Post not found</div>;
+  }
+
   return (
     <div>
-      "hello"
       <EditForm post={post} />
     </div>
   );
