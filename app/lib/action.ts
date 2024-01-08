@@ -43,8 +43,6 @@ export async function createPost(prevState: State, formData: FormData) {
 
   //Prepare data for insection into the database
   const { title, content } = validatedFields.data;
-  console.log("title", title);
-  console.log("content", content);
 
   try {
     await prisma.posts.create({
@@ -54,7 +52,7 @@ export async function createPost(prevState: State, formData: FormData) {
         authorId,
       },
     });
-    console.log("try");
+    console.log("In try block");
 
     // Handle success (e.g., return the new post)
     return { message: "Post created successfully" };
@@ -63,7 +61,25 @@ export async function createPost(prevState: State, formData: FormData) {
     return { errors: { message: "Failed to create post." } };
   } finally {
     await prisma.$disconnect();
-    console.log("finally");
+    console.log("In finally block");
+    revalidatePath("/posts/");
+    redirect("/posts/");
+  }
+}
+
+export async function deletePost(id: string) {
+  try {
+    await prisma.posts.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    return { message: "Post deleted successfully" };
+  } catch (error) {
+    return { errors: { message: "Failed to delete post." } };
+  } finally {
+    // Disconnect from Prisma and trigger revalidation and redirection
+    await prisma.$disconnect();
     revalidatePath("/posts/");
     redirect("/posts/");
   }

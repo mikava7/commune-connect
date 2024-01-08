@@ -5,7 +5,7 @@ const links = [
   { href: "/commune", label: "Commune" },
   { href: "/about", label: "About" },
   { href: "/mypage", label: "My Page" },
-  { href: "/members", label: "Members" },
+  { href: "/posts", label: "posts" },
 ];
 
 export default function Navbar() {
