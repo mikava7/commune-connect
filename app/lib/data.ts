@@ -56,27 +56,39 @@ export async function getUser(userId: string) {
   }
 }
 
-export async function createPost() {
-  const userId = 41;
-  const postData = {
-    title: "first Your Post Title",
-    content:
-      "// or false based on your requirementsYour Post Title // or false based on your requirements",
-
-    published: true, // or false based on your requirements
-    authorId: userId, // Assign the ID of the user who creates the post
-    // Other fields based on your model
-  };
-
+export async function getPosts() {
   try {
-    const createdPost = await prisma.posts.create({
-      data: postData,
-    });
-    console.log("Created post:", createdPost);
-  } catch (error) {
-    console.error("Error creating post:", error);
+    const posts = await prisma.posts.findMany();
+    return posts;
+  } catch (error: any) {
+    throw new Error("Failed to fetch posts: " + error.message);
   } finally {
+    // Disconnect the Prisma client to release the database connection
     await prisma.$disconnect();
   }
 }
-createPost();
+
+// export async function createPost() {
+//   const userId = 41;
+//   const postData = {
+//     title: "first Your Post Title",
+//     content:
+//       "// or false based on your requirementsYour Post Title // or false based on your requirements",
+
+//     published: true, // or false based on your requirements
+//     authorId: userId, // Assign the ID of the user who creates the post
+//     // Other fields based on your model
+//   };
+
+//   try {
+//     const createdPost = await prisma.posts.create({
+//       data: postData,
+//     });
+//     console.log("Created post:", createdPost);
+//   } catch (error) {
+//     console.error("Error creating post:", error);
+//   } finally {
+//     await prisma.$disconnect();
+//   }
+// }
+// createPost();

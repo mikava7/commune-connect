@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import { Member } from "@/app/lib/definitions";
-import { createPost } from "@/app/lib/data";
+// import { createPost } from "@/app/lib/data";
 export default function MemberProfile({ member }: { member: Member }) {
-  createPost();
+  // createPost();
   return (
     <div>
       <div>

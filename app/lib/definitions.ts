@@ -29,11 +29,8 @@ export type Post = {
   updatedAt: Date;
   title: string;
   content: string;
-  fileUrl: string;
-  published: boolean;
   author: Member;
   authorId: number;
-  categories?: Category[];
 };
 
 // Define TypeScript type for the Profile model

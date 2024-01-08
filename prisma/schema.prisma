@@ -27,7 +27,6 @@ model Category {
   id Int @id @default(autoincrement())
   name String
   description String
-  posts Posts[]
 }
 
 model Member {
@@ -58,13 +57,10 @@ model Posts {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   title      String
-  fileUrl    String @unique
-  published  Boolean    @default(false)
   content    String
   author     Member       @relation(fields: [authorId], references: [id])
   authorId   Int
   @@index([authorId], name: "idx_authorId")
-  categories Category[]
 
 }
 model Council {
