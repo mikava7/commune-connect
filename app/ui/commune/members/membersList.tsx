@@ -10,7 +10,7 @@ import {
   FlexContainer,
 } from "../../../../styles/styled-components";
 export default function MembersList({ members }: { members: Member[] }) {
-  // console.log("MembersList in MembersList", members);
+  console.log("MembersList in MembersList", members);
   return (
     <StyledContainer>
       <h1 className="mb-8 text-xl md:text-2xl">Members</h1>

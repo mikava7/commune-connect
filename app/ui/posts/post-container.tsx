@@ -1,13 +1,10 @@
 "use client";
 import { Post } from "@/app/lib/definitions";
 import { DeletePost, EditPost } from "./buttons";
-import { useSession } from "next-auth/react";
 
 type Props = {};
 
 const PostContainer = ({ posts }: { posts: Post }) => {
-  const { data: session, status } = useSession();
-  console.log({ session, status });
   return (
     <div>
       {" "}

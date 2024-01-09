@@ -1,10 +1,11 @@
 import NextAuth from "next-auth";
 import { authConfig } from "../../auth.config";
 import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
 import { User } from "../lib/definitions";
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt"; // Correct import
+import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 async function getUser(email: string) {
@@ -24,9 +25,23 @@ async function getUser(email: string) {
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
+  session: {
+    strategy: "jwt",
+  },
   providers: [
-    Credentials({
-      async authorize(credentials) {
+    CredentialsProvider({
+      // The name to display on the sign in form (e.g. "Sign in with...")
+      name: "Credentials",
+      // `credentials` is used to generate a form on the sign in page.
+      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+      // e.g. domain, username, password, 2FA token, etc.
+      // You can pass any HTML attribute to the <input> tag through the object.
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" },
+      },
+
+      async authorize(credentials, req) {
         console.log("credentials", credentials);
         const parsedCredentials = z
           .object({ email: z.string().email(), password: z.string().min(6) })

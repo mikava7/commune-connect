@@ -43,6 +43,7 @@ model Member {
   imageLink String
 }
 
+
 model Profile {
   id     Int    @id @default(autoincrement())
   bio    String

@@ -14,7 +14,7 @@ export const authConfig: NextAuthConfig = {
       }
 
       // For logged-in users, block access to /member/* routes
-      if (nextUrl.pathname.startsWith("/member")) {
+      if (nextUrl.pathname.startsWith("/posts")) {
         return Response.redirect(new URL("/commune", nextUrl));
       }
 
