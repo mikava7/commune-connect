@@ -8,7 +8,10 @@ import {
   KeyIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 
+import { Button } from "@/app/ui/button";
+import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
@@ -49,12 +52,7 @@ export default function LoginPage() {
             />
             <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
           </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white p-2 rounded-md w-full hover:bg-blue-600"
-          >
-            Login
-          </button>
+          <LoginButton />
           <Link href="/member/register">
             <button
               type="submit"
@@ -78,5 +76,18 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+function LoginButton() {
+  const { pending } = useFormStatus();
+  const router = useRouter();
+  const onClick = () => {
+    router.push("/commune");
+  };
+  return (
+    <Button className="mt-4 w-full" aria-disabled={pending}>
+      Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+    </Button>
   );
 }

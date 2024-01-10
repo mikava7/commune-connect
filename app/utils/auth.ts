@@ -6,6 +6,7 @@ import { z } from "zod";
 import { User } from "../lib/definitions";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+
 const prisma = new PrismaClient();
 
 async function getUser(email: string) {
@@ -25,9 +26,7 @@ async function getUser(email: string) {
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
-  session: {
-    strategy: "jwt",
-  },
+
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
@@ -63,15 +62,15 @@ export const { auth, signIn, signOut } = NextAuth({
 
           if (passwordsMatch) {
             console.log("Login successful");
-            return user;
           } else {
             console.log("Passwords do not match");
             return null;
           }
         }
-        console.log("Invalid credentials");
-        return null;
+        console.log("Invalid credentials2");
+        return { error: "Invalid credentials" };
       },
     }),
   ],
+  session: { strategy: "jwt" },
 });
